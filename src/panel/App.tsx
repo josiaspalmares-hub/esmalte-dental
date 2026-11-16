@@ -5,7 +5,7 @@ import { Logo } from '@/components/Marca'
 import { CLINICA } from '@/datos'
 import { guardarSolicitudes, leerSolicitudes, type Solicitud } from '@/lib/solicitudes'
 import { cn } from '@/lib/utils'
-import { CAPACIDAD_DIA, SEMANA, citasDeHoy, horaTexto, solicitudesDeMuestra, type Cita, type EstadoCita } from './muestra'
+import { CAPACIDAD_DIA, SEMANA, fechaDeClave, horaTexto, jornadaVisible, solicitudesDeMuestra, type Cita, type EstadoCita, type Jornada } from './muestra'
 
 const CLAVE_CITAS = 'esmalte:citas-hoy'
 const fmtHoy = new Intl.DateTimeFormat('es-VE', { weekday: 'long', day: 'numeric', month: 'long' })
@@ -25,18 +25,23 @@ const SIGUIENTE: Partial<Record<EstadoCita, { a: EstadoCita; texto: string }>> =
   'en-sillon': { a: 'atendida', texto: 'Terminó' },
 }
 
-function leerCitas(): Cita[] {
+function leerJornada(): Jornada {
+  const nueva = jornadaVisible()
   const crudo = sessionStorage.getItem(CLAVE_CITAS)
-  return crudo ? (JSON.parse(crudo) as Cita[]) : citasDeHoy()
+  if (!crudo) return nueva
+  const guardada = JSON.parse(crudo) as Jornada
+  return guardada.fecha === nueva.fecha ? guardada : nueva
 }
 
 export function App() {
-  const [citas, setCitas] = useState<Cita[]>(leerCitas)
+  const [jornada, setJornada] = useState<Jornada>(leerJornada)
+  const citas = jornada.citas
+  const setCitas = (cambiar: (cs: Cita[]) => Cita[]) => setJornada((j) => ({ ...j, citas: cambiar(j.citas) }))
   const [propias, setPropias] = useState<Solicitud[]>(leerSolicitudes)
   const [muestra, setMuestra] = useState<Solicitud[]>(solicitudesDeMuestra)
   const [ahora, setAhora] = useState(() => new Date())
 
-  useEffect(() => { sessionStorage.setItem(CLAVE_CITAS, JSON.stringify(citas)) }, [citas])
+  useEffect(() => { sessionStorage.setItem(CLAVE_CITAS, JSON.stringify(jornada)) }, [jornada])
   useEffect(() => {
     const reloj = setInterval(() => setAhora(new Date()), 30000)
     const alVolver = () => setPropias(leerSolicitudes())
@@ -64,7 +69,7 @@ export function App() {
 
   function reiniciar() {
     sessionStorage.removeItem(CLAVE_CITAS)
-    setCitas(citasDeHoy())
+    setJornada(jornadaVisible())
     setMuestra(solicitudesDeMuestra())
     const lista = propias.map((x) => ({ ...x, estado: 'nueva' as const }))
     setPropias(lista)
@@ -86,15 +91,17 @@ export function App() {
         <div>
           <a href="/" className="text-salvia hover:text-pino"><Logo /></a>
           <h1 className="titular mt-4 text-4xl md:text-5xl">Recepción</h1>
-          <p className="mt-1 text-salvia">{mayuscula(fmtHoy.format(ahora))} · {horaTexto(minutos)}</p>
+          <p className="mt-1 text-salvia">
+            {jornada.futura ? `Ya cerramos por hoy · agenda del ${fmtHoy.format(fechaDeClave(jornada.fecha))}` : `${mayuscula(fmtHoy.format(ahora))} · ${horaTexto(minutos)}`}
+          </p>
         </div>
         <a href="/" className="boton boton--borde min-h-[44px]">Ver la web de la clínica</a>
       </header>
 
       <main className="contenedor grid gap-6 pb-16 lg:grid-cols-[1.35fr_1fr]">
         <div className="grid content-start gap-6">
-          <Proxima cita={proxima} minutos={minutos} enSillon={enSillon} alCambiar={cambiar} />
-          <Agenda citas={citas} alCambiar={cambiar} />
+          <Proxima cita={proxima} minutos={minutos} futura={jornada.futura} enSillon={enSillon} alCambiar={cambiar} />
+          <Agenda titulo={jornada.futura ? `Agenda del ${fmtHoy.format(fechaDeClave(jornada.fecha))}` : 'Agenda de hoy'} citas={citas} alCambiar={cambiar} />
         </div>
 
         <div className="grid content-start gap-6">
@@ -107,7 +114,7 @@ export function App() {
   )
 }
 
-function Proxima({ cita, minutos, enSillon, alCambiar }: { cita?: Cita; minutos: number; enSillon: Cita[]; alCambiar: (id: string, c: Partial<Cita>) => void }) {
+function Proxima({ cita, minutos, futura, enSillon, alCambiar }: { cita?: Cita; minutos: number; futura: boolean; enSillon: Cita[]; alCambiar: (id: string, c: Partial<Cita>) => void }) {
   if (!cita) {
     return (
       <section className="rounded-[var(--radius-tarjeta)] border border-linea bg-papel p-6" aria-labelledby="proxima-titulo">
@@ -118,9 +125,9 @@ function Proxima({ cita, minutos, enSillon, alCambiar }: { cita?: Cita; minutos:
     )
   }
   const falta = cita.hora - minutos
-  const cuando = falta > 1 ? `en ${falta} min` : falta >= -10 ? 'ahora' : `con ${-falta} min de retraso`
+  const cuando = futura ? `primera cita del día, ${horaTexto(cita.hora)}` : falta > 1 ? `en ${falta} min` : falta >= -10 ? 'ahora' : `con ${-falta} min de retraso`
   const paso = SIGUIENTE[cita.estado]
-  const recordatorio = `Hola ${cita.paciente.split(' ')[0]}, te escribimos de Esmalte para recordarte tu cita de hoy a las ${horaTexto(cita.hora)} (${cita.tratamiento.toLowerCase()}). ¡Te esperamos!`
+  const recordatorio = `Hola ${cita.paciente.split(' ')[0]}, te escribimos de Esmalte para recordarte tu cita ${futura ? 'de mañana' : 'de hoy'} a las ${horaTexto(cita.hora)} (${cita.tratamiento.toLowerCase()}). ¡Te esperamos!`
   return (
     <section className="relative overflow-hidden rounded-[var(--radius-tarjeta)] bg-pino p-6 text-marfil md:p-8" aria-labelledby="proxima-titulo">
       <h2 id="proxima-titulo" className="text-sm font-semibold text-marfil/75">Siguiente paciente · {cuando}</h2>
@@ -145,10 +152,10 @@ function Proxima({ cita, minutos, enSillon, alCambiar }: { cita?: Cita; minutos:
   )
 }
 
-function Agenda({ citas, alCambiar }: { citas: Cita[]; alCambiar: (id: string, c: Partial<Cita>) => void }) {
+function Agenda({ titulo, citas, alCambiar }: { titulo: string; citas: Cita[]; alCambiar: (id: string, c: Partial<Cita>) => void }) {
   return (
     <section className="rounded-[var(--radius-tarjeta)] border border-linea bg-papel p-5 md:p-6" aria-labelledby="agenda-titulo">
-      <h2 id="agenda-titulo" className="titular text-2xl">Agenda de hoy</h2>
+      <h2 id="agenda-titulo" className="titular text-2xl">{titulo}</h2>
       <ol className="mt-4 divide-y divide-linea">
         {citas.map((c) => {
           const paso = SIGUIENTE[c.estado]

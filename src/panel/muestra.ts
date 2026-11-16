@@ -39,6 +39,26 @@ export function citasDeHoy(ahora = new Date()): Cita[] {
   })
 }
 
+// Después de las 6:00 p. m. o en domingo, el panel muestra la agenda del siguiente día hábil
+export type Jornada = { fecha: string; futura: boolean; citas: Cita[] }
+
+const claveDia = (d: Date) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
+
+export function jornadaVisible(ahora = new Date()): Jornada {
+  const minutos = ahora.getHours() * 60 + ahora.getMinutes()
+  if (minutos < 18 * 60 && ahora.getDay() !== 0) return { fecha: claveDia(ahora), futura: false, citas: citasDeHoy(ahora) }
+  const dia = new Date(ahora)
+  do dia.setDate(dia.getDate() + 1)
+  while (dia.getDay() === 0)
+  const citas = BASE.map((c, i) => ({ ...c, id: `c${i}`, hora: 8 * 60 + i * 45, estado: 'por-llegar' as const, pagada: false }))
+  return { fecha: claveDia(dia), futura: true, citas }
+}
+
+export const fechaDeClave = (clave: string) => {
+  const [a, m, d] = clave.split('-').map(Number)
+  return new Date(a, m - 1, d)
+}
+
 export function solicitudesDeMuestra(): Solicitud[] {
   const hace = (min: number) => new Date(Date.now() - min * 60000).toISOString()
   return [
