@@ -1,0 +1,78 @@
+@import "tailwindcss";
+@import "@fontsource/gloock/latin-400.css";
+@import "@fontsource-variable/onest/wght.css";
+
+/* Sistema de diseño de Esmalte: marfil (el esmalte), pino (la tinta) y coral solo para la acción principal */
+@theme {
+  --color-marfil: #f5f2ea;
+  --color-marfil-2: #ebe6da;
+  --color-papel: #fbfaf6;
+  --color-pino: #12302b;
+  --color-pino-2: #1d4740;
+  --color-salvia: #4b5d57;
+  --color-linea: rgb(18 48 43 / 0.14);
+  --color-coral: #b8442a;
+  --color-coral-2: #9c361f;
+  --color-alerta: #8a2a17;
+  --color-ok: #2f6b4f;
+
+  --font-titular: 'Gloock', Georgia, serif;
+  --font-sans: 'Onest Variable', system-ui, sans-serif;
+
+  --radius-campo: 10px;
+  --radius-tarjeta: 18px;
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--color-marfil);
+    color: var(--color-pino);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--color-pino); color: var(--color-marfil); }
+  :focus-visible { outline: 2px solid var(--color-coral); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer components {
+  .contenedor { width: min(100% - 32px, 1180px); margin-inline: auto; }
+  @media (min-width: 768px) { .contenedor { width: min(100% - 64px, 1180px); } }
+
+  .titular { font-family: var(--font-titular); font-weight: 400; letter-spacing: -0.01em; }
+
+  .boton {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    min-height: 50px; padding: 0 24px; border-radius: 999px;
+    font-weight: 600; font-size: 1rem; text-decoration: none; cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s var(--ease-salida), border-color 0.2s;
+  }
+  .boton:active { transform: scale(0.98); }
+  .boton--principal { background: var(--color-coral); color: #fff; }
+  .boton--principal:hover { background: var(--color-coral-2); }
+  .boton--borde { border: 1px solid var(--color-pino); color: var(--color-pino); background: transparent; }
+  .boton--borde:hover { background: var(--color-pino); color: var(--color-marfil); }
+  .boton--pino { background: var(--color-pino); color: var(--color-marfil); }
+  .boton--pino:hover { background: var(--color-pino-2); }
+
+  .campo { display: grid; gap: 6px; font-size: 0.95rem; }
+  .campo > span { font-weight: 600; }
+  .campo input, .campo select {
+    min-height: 50px; padding: 0 14px; border-radius: var(--radius-campo);
+    border: 1px solid rgb(18 48 43 / 0.28); background: var(--color-papel); color: var(--color-pino);
+    font: inherit;
+  }
+  .campo input:focus, .campo select:focus { outline: 2px solid var(--color-pino); outline-offset: 1px; border-color: transparent; }
+  .campo input[aria-invalid='true'] { border-color: var(--color-alerta); }
+
+  /* Firma: la muela se dibuja una sola vez al abrir */
+  .muela-trazo { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trazar 1.4s var(--ease-salida) 0.15s forwards; }
+  @keyframes trazar { to { stroke-dashoffset: 0; } }
+
+  .solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
