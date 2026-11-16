@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /panel.html
 
-Sitemap: https://esmalte-dental.vercel.app/sitemap.xml
+Sitemap: https://esmalte-caracas.vercel.app/sitemap.xml
