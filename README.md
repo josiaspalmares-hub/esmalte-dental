@@ -1,4 +1,4 @@
-# Esmalte · clínica dental (proyecto de muestra)
+# Clínica Dental El Rosal (proyecto de muestra)
 
 Web y panel de recepción de una clínica dental ficticia en Caracas, hecha para el portafolio de Josías Palmares.
 

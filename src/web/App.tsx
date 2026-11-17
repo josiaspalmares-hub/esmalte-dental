@@ -30,7 +30,7 @@ export function App() {
       <a href="#contenido" className="solo-lector focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded focus:bg-pino focus:p-3 focus:text-marfil">Saltar al contenido</a>
       <header className="sticky top-0 z-30 border-b border-linea bg-marfil/95">
         <div className="contenedor flex h-16 items-center justify-between gap-6">
-          <a href="#" aria-label="Esmalte, inicio"><Logo dibujar /></a>
+          <a href="#" aria-label="Clínica Dental El Rosal, inicio"><Logo dibujar /></a>
           <nav aria-label="Secciones" className="hidden gap-7 md:flex">
             {ENLACES.map((e) => <a key={e.href} href={e.href} className="text-[0.97rem] text-salvia hover:text-pino">{e.texto}</a>)}
           </nav>

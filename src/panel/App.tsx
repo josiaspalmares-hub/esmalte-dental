@@ -127,7 +127,7 @@ function Proxima({ cita, minutos, futura, enSillon, alCambiar }: { cita?: Cita; 
   const falta = cita.hora - minutos
   const cuando = futura ? `primera cita del día, ${horaTexto(cita.hora)}` : falta > 1 ? `en ${falta} min` : falta >= -10 ? 'ahora' : `con ${-falta} min de retraso`
   const paso = SIGUIENTE[cita.estado]
-  const recordatorio = `Hola ${cita.paciente.split(' ')[0]}, te escribimos de Esmalte para recordarte tu cita ${futura ? 'de mañana' : 'de hoy'} a las ${horaTexto(cita.hora)} (${cita.tratamiento.toLowerCase()}). ¡Te esperamos!`
+  const recordatorio = `Hola ${cita.paciente.split(' ')[0]}, te escribimos de la Clínica Dental El Rosal para recordarte tu cita ${futura ? 'de mañana' : 'de hoy'} a las ${horaTexto(cita.hora)} (${cita.tratamiento.toLowerCase()}). ¡Te esperamos!`
   return (
     <section className="relative overflow-hidden rounded-[var(--radius-tarjeta)] bg-pino p-6 text-marfil md:p-8" aria-labelledby="proxima-titulo">
       <h2 id="proxima-titulo" className="text-sm font-semibold text-marfil/75">Siguiente paciente · {cuando}</h2>
@@ -207,7 +207,7 @@ function Pedidos({ pendientes, alResponder }: { pendientes: Solicitud[]; alRespo
               <div className="mt-3 flex flex-wrap gap-2">
                 <a
                   className="min-h-[40px] content-center rounded-full bg-pino px-4 text-sm font-semibold text-marfil hover:bg-pino-2"
-                  href={wa(s.telefono, `Hola ${s.nombre}, te confirmamos tu cita en Esmalte el ${s.dia} a las ${s.hora}: ${s.tratamiento.toLowerCase()}. Estamos en ${CLINICA.direccion}.`)}
+                  href={wa(s.telefono, `Hola ${s.nombre}, te confirmamos tu cita en la Clínica Dental El Rosal el ${s.dia} a las ${s.hora}: ${s.tratamiento.toLowerCase()}. Estamos en ${CLINICA.direccion}.`)}
                   target="_blank"
                   rel="noopener"
                   onClick={() => alResponder(s, 'confirmada')}
@@ -216,7 +216,7 @@ function Pedidos({ pendientes, alResponder }: { pendientes: Solicitud[]; alRespo
                 </a>
                 <a
                   className="min-h-[40px] content-center rounded-full border border-pino px-4 text-sm font-semibold hover:bg-pino hover:text-marfil"
-                  href={wa(s.telefono, `Hola ${s.nombre}, te escribimos de Esmalte. Esa hora ya está tomada; ¿te sirve otra el mismo día?`)}
+                  href={wa(s.telefono, `Hola ${s.nombre}, te escribimos de la Clínica Dental El Rosal. Esa hora ya está tomada; ¿te sirve otra el mismo día?`)}
                   target="_blank"
                   rel="noopener"
                   onClick={() => alResponder(s, 'otra-hora')}

@@ -1,7 +1,6 @@
 import { BlurFade } from '@/components/ui/blur-fade'
-import { CLINICA } from '@/datos'
 
-const mensaje = encodeURIComponent('Hola Esmalte, quiero información para una cita.')
+const mensaje = encodeURIComponent('Hola, Clínica Dental El Rosal. Quiero información para una cita.')
 
 export function Portada() {
   return (
@@ -23,7 +22,7 @@ export function Portada() {
         <BlurFade delay={0.28}>
           <div className="mt-8 flex flex-wrap gap-3">
             <a className="boton boton--principal" href="#agendar">Pedir mi cita</a>
-            <a className="boton boton--borde" href={`https://wa.me/${CLINICA.whatsapp}?text=${mensaje}`} target="_blank" rel="noopener">
+            <a className="boton boton--borde" href={`https://wa.me/?text=${mensaje}`} target="_blank" rel="noopener">
               Escribir por WhatsApp
             </a>
           </div>

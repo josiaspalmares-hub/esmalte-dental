@@ -21,7 +21,10 @@ export function Logo({ dibujar = false, className }: { dibujar?: boolean; classN
   return (
     <span className={cn('inline-flex items-center gap-2', className)}>
       <Muela className="size-7" dibujar={dibujar} />
-      <span className="titular text-2xl leading-none">Esmalte</span>
+      <span className="grid leading-none">
+        <span className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase">Clínica Dental</span>
+        <span className="titular text-2xl">El Rosal</span>
+      </span>
     </span>
   )
 }

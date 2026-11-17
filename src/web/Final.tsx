@@ -33,7 +33,7 @@ export function Ubicacion() {
         <a className="boton boton--borde mt-8" href={CLINICA.como_llegar} target="_blank" rel="noopener">Cómo llegar</a>
       </div>
       <iframe
-        title="Mapa de la ubicación de Esmalte en El Rosal"
+        title="Mapa de la ubicación de la Clínica Dental El Rosal"
         src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=10.4917,-66.8574`}
         loading="lazy"
         className="aspect-[4/3] w-full rounded-[var(--radius-tarjeta)] border border-linea lg:aspect-auto lg:h-full lg:min-h-[420px]"
@@ -68,7 +68,7 @@ export function Pie() {
         <div>
           <Logo />
           <p className="mt-4 max-w-xl text-marfil/80">
-            <strong className="text-marfil">Proyecto de muestra.</strong> Esmalte es una clínica ficticia hecha por{' '}
+            <strong className="text-marfil">Proyecto de muestra.</strong> La Clínica Dental El Rosal es una clínica ficticia hecha por{' '}
             <a className="underline underline-offset-2" href="https://josias-palmares.vercel.app" target="_blank" rel="noopener">Josías Palmares</a>{' '}
             para su portafolio. Nombres, precios y dirección son de ejemplo.
           </p>

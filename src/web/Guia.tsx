@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { CLINICA, MOTIVOS, tratamiento } from '@/datos'
+import { MOTIVOS, tratamiento } from '@/datos'
 import type { EstadoTasa } from '@/lib/moneda'
 import { Precio } from '@/components/Precio'
 import { cn } from '@/lib/utils'
 
-const urgencia = encodeURIComponent('Hola Esmalte, tengo una urgencia: me duele mucho y tengo hinchazón.')
+const urgencia = encodeURIComponent('Hola, Clínica Dental El Rosal. Tengo una urgencia: me duele mucho y tengo hinchazón.')
 
 export function Guia({ tasa, alAgendar }: { tasa: EstadoTasa; alAgendar: (tratamientoId: string) => void }) {
   const [elegido, setElegido] = useState(MOTIVOS[0].id)
@@ -89,7 +89,7 @@ export function Guia({ tasa, alAgendar }: { tasa: EstadoTasa; alAgendar: (tratam
                   Pedir cita: {agendar.nombre.toLowerCase()}
                 </button>
                 {motivo.urgente && (
-                  <a className="text-marfil underline underline-offset-4" href={`https://wa.me/${CLINICA.whatsapp}?text=${urgencia}`} target="_blank" rel="noopener">
+                  <a className="text-marfil underline underline-offset-4" href={`https://wa.me/?text=${urgencia}`} target="_blank" rel="noopener">
                     ¿Hinchazón o fiebre? Escríbenos ya
                   </a>
                 )}

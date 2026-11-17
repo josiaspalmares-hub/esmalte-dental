@@ -1,8 +1,7 @@
 // Datos de la clínica (ficticia, para el portafolio)
 
 export const CLINICA = {
-  nombre: 'Esmalte',
-  whatsapp: '584223243034',
+  nombre: 'Clínica Dental El Rosal',
   direccion: 'Av. Francisco de Miranda, Torre Ceiba, piso 3, El Rosal, Caracas',
   mapa: 'https://www.openstreetmap.org/?mlat=10.4917&mlon=-66.8574#map=17/10.4917/-66.8574',
   como_llegar: 'https://www.google.com/maps/search/?api=1&query=El+Rosal+Caracas',

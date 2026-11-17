@@ -1,5 +1,5 @@
 import { useMemo, useState, type FormEvent } from 'react'
-import { CLINICA, DENTISTAS, TRATAMIENTOS, TURNOS, tratamiento } from '@/datos'
+import { DENTISTAS, TRATAMIENTOS, TURNOS, tratamiento } from '@/datos'
 import { agregarSolicitud, telefonoValido, type Solicitud } from '@/lib/solicitudes'
 import { cn } from '@/lib/utils'
 
@@ -56,8 +56,8 @@ export function Agendar({ tratamientoId, alCambiarTratamiento }: { tratamientoId
     const quien = DENTISTAS.find((d) => d.id === dentista)?.nombre ?? 'Cualquiera'
     const cuando = fmtLargo.format(fechaElegida!)
     const solicitud = agregarSolicitud({ nombre: nombre.trim(), telefono: telefono.trim(), tratamiento: t.nombre, dentista: quien, dia: cuando, hora })
-    const texto = `Hola Esmalte, quiero pedir una cita.\n\nTratamiento: ${t.nombre}\nCon: ${quien}\nDía: ${cuando}\nHora: ${hora}\nNombre: ${solicitud.nombre}\nTeléfono: ${solicitud.telefono}`
-    window.open(`https://wa.me/${CLINICA.whatsapp}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener')
+    const texto = `Hola, Clínica Dental El Rosal. Quiero pedir una cita.\n\nTratamiento: ${t.nombre}\nCon: ${quien}\nDía: ${cuando}\nHora: ${hora}\nNombre: ${solicitud.nombre}\nTeléfono: ${solicitud.telefono}`
+    window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank', 'noopener')
     setEnviada(solicitud)
   }
 
